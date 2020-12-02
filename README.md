@@ -1,6 +1,6 @@
 # ConcatenatedCodedRepeaters
 
-This is the code used to generate the data for the article arxiv: ...
+This is the code used to generate the data for the article arXiv:2011.15076
 
 ## Content
 The code consists of two parts:
