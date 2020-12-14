@@ -136,13 +136,8 @@ parfor j = 1:N
     %We have a success if after the whole procedure therer are no errors.
     %For success we assign m=1, for failure m=0.
     if Xerrors == zeros(7,1) &  Zerrors == zeros(7,1)
-        m=1;
-    else
-        m=0;
+        M = M+1;
     end
-    
-    %Count successes
-    M = M + m;
 
     %Count the errors
     if any(Zerrors)

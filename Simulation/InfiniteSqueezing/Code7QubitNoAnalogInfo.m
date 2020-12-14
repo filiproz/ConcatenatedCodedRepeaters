@@ -1,0 +1,138 @@
+function out = Code7QubitNoAnalogInfo(noise, value, n, N)
+%This function calculates the probability that the [[7,1,3]] code,
+%concatenated with GKP code, corrects random shifts in phase space with
+%SD sigma when infinitely squeezed ancillas are used. For this function the
+%analog information from GKP corrections is not used. The success
+%probability is over a link between two neighbouring multi-qubit repeaters.
+
+%Inputs:
+
+%noise -    define type of noise considered;
+%       0 -     random displacement with Gaussian distribution
+%       1 -     amplification followed by pure loss
+%value -    strength of noise, either standard deviation of Gaussian
+%           displacement or loss probability gamma for the pure loss channel
+%n -        number of GKP channels and GKP corrections before a higher level correction
+%N -        number of simulation runs
+
+%Outputs:
+
+%psucc -    probability that there was no logical error
+
+% Either define SD sigma directly or through the loss parameter gamma
+%for the pure loss channel.
+if noise == 0
+    sig = value;
+elseif noise == 1
+    sig = sqrt(value);
+end
+
+%Define the look-up table for single  errors. The table is the same for Z
+%and X errors
+%Rows are 3 X stabilisers and columns are single Z errors (parity check matrix) or vice versa.
+
+tableSingleErr =    [ 0, 0, 0, 1, 1, 1, 1;
+                      0, 1, 1, 0, 0, 1, 1;
+                      1, 0, 1, 0, 1, 0, 1]';
+
+%Count successes
+M = 0;
+
+%Simulation
+
+parfor j = 1:N
+    %Define the vector of X and Z errors:
+    Xerrors = zeros(7,1);
+    Zerrors = zeros(7,1);
+    
+    [~, ~, Xflips, Zflips] = ChannelWithGKPCorr(7,sig,n);
+    
+    Xerrors = mod(Xerrors + Xflips,2);
+    Zerrors = mod(Zerrors + Zflips,2);
+    
+   %Now we check Z errors. In the simulation we proceed only if there were Z errors after GKP. If there were no Z errors then
+   %nothing happens.
+   
+   if any(Zerrors)
+        
+        %Measuring X stabilisers to check for Z errors
+
+        %Make the IIIXXXX measurement
+        parityIIIXXXX = mod(Zerrors(4) + Zerrors(5) + Zerrors(6) + Zerrors(7), 2);
+
+        %Make the IXXIIXX measurement
+        parityIXXIIXX = mod(Zerrors(2) + Zerrors(3) + Zerrors(6) + Zerrors(7), 2);
+
+        %Make the XIXIXIX measurement
+        parityXIXIXIX = mod(Zerrors(1) + Zerrors(3) + Zerrors(5) + Zerrors(7), 2);
+
+        parityVectorZerr = [parityIIIXXXX, parityIXXIIXX, parityXIXIXIX];
+        
+        %If we got a logical error we will not detect it, so we only proceed if the parity check signals an error: 
+        if any(parityVectorZerr)
+            
+            error_vector_z = SyndromeToErrorsSingleErrors(parityVectorZerr, tableSingleErr, 7);
+                      
+            %Correct those errors
+            Zerrors = mod(Zerrors + transpose(error_vector_z), 2);
+        
+        end
+   end
+
+   % Certain 4Qubit errors are not errors as they are exactly stabilisers:
+   if isequal(Zerrors, [0; 0; 0; 1; 1; 1; 1]) || isequal(Zerrors, [0; 1; 1; 0; 0; 1; 1])...
+      || isequal(Zerrors, [1; 0; 1; 0; 1; 0; 1]) || isequal(Zerrors, [0; 1; 1; 1; 1; 0; 0])...
+      || isequal(Zerrors, [1; 0; 1; 1; 0; 1; 0]) || isequal(Zerrors, [1; 1; 0; 0; 1; 1; 0])...
+      || isequal(Zerrors, [1; 1; 0; 1; 0; 0; 1])
+  
+        Zerrors = zeros(7,1);
+   end
+   
+   
+   %Now we check for X errors. In the simulation we proceed only if there were X errors after GKP. If there were no X errors then
+   %nothing happens.
+   
+   if any(Xerrors)
+       
+        %Measuring Z stabilisers to check for X errors
+
+        %Make the IIIXXXX measurement
+        parityIIIZZZZ = mod(Xerrors(4) + Xerrors(5) + Xerrors(6) + Xerrors(7), 2);
+
+        %Make the IXXIIXX measurement
+        parityIZZIIZZ = mod(Xerrors(2) + Xerrors(3) + Xerrors(6) + Xerrors(7), 2);
+
+        %Make the XIXIXIX measurement
+        parityZIZIZIZ = mod(Xerrors(1) + Xerrors(3) + Xerrors(5) + Xerrors(7), 2);
+
+        parityVectorXerr = [parityIIIZZZZ, parityIZZIIZZ, parityZIZIZIZ];
+        
+        %If we got a logical error we will not detect it, so we only proceed if the parity check signals an error: 
+        if any(parityVectorXerr)
+                        
+            error_vector_x = SyndromeToErrorsSingleErrors(parityVectorXerr, tableSingleErr, 7);
+                       
+            %Correct those errors
+            Xerrors = mod(Xerrors + transpose(error_vector_x), 2);
+
+        end
+   end
+   
+   % Certain 4Qubit errors are not errors as they are exactly stabilisers:
+   if isequal(Xerrors, [0; 0; 0; 1; 1; 1; 1]) || isequal(Xerrors, [0; 1; 1; 0; 0; 1; 1])...
+      || isequal(Xerrors, [1; 0; 1; 0; 1; 0; 1]) || isequal(Xerrors, [0; 1; 1; 1; 1; 0; 0])...
+      || isequal(Xerrors, [1; 0; 1; 1; 0; 1; 0]) || isequal(Xerrors, [1; 1; 0; 0; 1; 1; 0])...
+      || isequal(Xerrors, [1; 1; 0; 1; 0; 0; 1])
+  
+        Xerrors = zeros(7,1);
+   end
+   
+   %We have a success if after the whole procedure therer are no errors.
+   %For success we assign m=1, for failure m=0.
+   if Xerrors == zeros(7,1) &  Zerrors == zeros(7,1)
+        M = M+1;  
+   end
+   
+end
+
+out = M/N;

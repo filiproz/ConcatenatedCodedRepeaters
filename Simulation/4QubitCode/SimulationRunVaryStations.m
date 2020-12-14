@@ -64,8 +64,8 @@ for NMultiQubit = MultiQubitStart:MultiQubitStationsRange
             %Rerun the simulation with increased N, we reuse the previous
             %runs as the 10% of the new sample.
             N = 10*N
-            [succ_est2,Zerr2,Xerr2] = Code4Qubit(1, gamma, sigGKP, Nall/NMultiQubit, 0.9 * N);
-            psucc = 0.1 * psucc + 0.9 * succ_est2;
+            [psucc2,Zerr2,Xerr2] = Code4Qubit(1, gamma, sigGKP, Nall/NMultiQubit, 0.9 * N);
+            psucc = 0.1 * psucc + 0.9 * psucc2;
             Zerr = 0.1 * Zerr + 0.9 * Zerr2;
             Xerr = 0.1 * Xerr + 0.9 * Xerr2;
             %
@@ -79,7 +79,7 @@ for NMultiQubit = MultiQubitStart:MultiQubitStationsRange
         Zerr
         Xerr
         Data4QubitCode(NMultiQubit,Nall,:) = [1 - psucc^NMultiQubit, Zerr,Xerr];
-        %save(filename, 'Data4QubitCode') 
+        save(filename, 'Data4QubitCode') 
     end
 end
-%save(filename, 'Data4QubitCode')
+save(filename, 'Data4QubitCode')

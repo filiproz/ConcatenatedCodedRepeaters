@@ -94,13 +94,8 @@ parfor j = 1:N
     %We have a success if after the whole procedure there are no errors.
     %For success we assign m=1, for failure m=0.
     if Xerrors == zeros(4,1) &  Zerrors == zeros(4,1)
-        m=1;
-    else
-        m=0;
+        M = M+1;
     end
-       
-    %m is the outcome of j'th simulation run
-    M = M + m;
         
     %Count the errors
     if any(Zerrors)
