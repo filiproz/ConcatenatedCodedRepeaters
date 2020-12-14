@@ -9,7 +9,7 @@
 %Graining of the gamma loss interval into m data points
 m = 100; 
 %%Relative error threshold:
-rel_err_thr = 0.9;
+rel_err_thr = 0.1;
 
 Gamma_4Q= zeros(m,2);
 Gamma_7Q= zeros(m,2);
