@@ -5,6 +5,8 @@
 % the only source of noise (alternatively, one can also think that perfect 
 %photon coupling efficiency is considered). The data corresponds to
 %logical error probability (any type of Pauli error) vs gamma.
+%%We also specify the error threshold "b" which determines the maximum
+%relative error that we can tolerate.
 
 %Graining of the gamma loss interval into m data points
 m = 100; 
