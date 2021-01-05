@@ -1,4 +1,4 @@
-function psucc = Code4Qubit(noise, value, n, N)
+function [psucc,Zerr,Xerr] = Code4Qubit(noise, value, n, N)
 %This function calculates the probability that the [[4,1,2]] code,
 %concatenated with GKP code, corrects random shifts in phase space with
 %SD sigma when infinitely squeezed ancillas are used. The success
@@ -17,6 +17,8 @@ function psucc = Code4Qubit(noise, value, n, N)
 %Outputs:
 
 %psucc -    probability that there was no logical error
+%Zerr -     probability of a logical phase flip
+%Xerr -     probability of a logical bit flip
 
 
 % Either define SD sigma directly or through the loss parameter gamma
@@ -29,6 +31,10 @@ end
 
 %Count successes
 M = 0;
+%Count logical X errors after correction
+Xerr=0;
+%Count logical Z errors after correction
+Zerr=0;
 
 parfor j = 1:N
     %Define the vector of X and Z errors:
@@ -132,7 +138,16 @@ parfor j = 1:N
         M = M+1;
     end
     
-        
+    %Count the errors
+    if any(Zerrors)
+        Zerr = Zerr + 1;
+    end
+    if any(Xerrors)
+        Xerr = Xerr + 1;
+    end    
 end
 
+%Output probability of success as well as logical X and Z error probabilities
 psucc = M/N;
+Zerr = Zerr/N;
+Xerr = Xerr/N;

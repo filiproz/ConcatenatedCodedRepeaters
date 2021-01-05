@@ -13,90 +13,114 @@ m = 100;
 %%Relative error threshold:
 rel_err_thr = 0.1;
 
-Gamma_4Q= zeros(m,2);
-Gamma_7Q= zeros(m,2);
-Gamma_7QNoAnalogInfo= zeros(m,2);
-Gamma_GKPRepChain= zeros(m,2);
+Gamma_4Q= zeros(m,4);
+Gamma_7Q= zeros(m,4);
+Gamma_7QNoAnalogInfo= zeros(m,4);
+Gamma_GKPRepChain= zeros(m,4);
 gammaRange = 0.08 : 0.12/m : 0.2;
 
 for idx = 1:numel(gammaRange)
     gamma = gammaRange(idx);
     N=10;
-    error_est = 1 - Code4Qubit(1, gamma,1, N);
-    st_err = sqrt( (error_est * (1 - error_est))/N );
+    [psucc,Zerr,Xerr] = Code4Qubit(1, gamma,1, N);
+    st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+    st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
     %
-    rel_err = st_err/error_est;
-    while rel_err > rel_err_thr || error_est==0
+    rel_err_Z = st_err_Z/Zerr;
+    rel_err_X = st_err_X/Xerr;
+    while rel_err_Z > rel_err_thr || rel_err_X > rel_err_thr || Zerr == 0 || Xerr == 0
         N = 10*N;
-        error_est2 = 1 - Code4Qubit(1, gamma,1, 0.9*N);
-        error_est = 0.1 * error_est + 0.9 * error_est2;
+        [psucc2,Zerr2,Xerr2] = Code4Qubit(1, gamma,1, 0.9*N);
+        psucc = 0.1 * psucc + 0.9 * psucc2;
+        Zerr = 0.1 * Zerr + 0.9 * Zerr2;
+        Xerr = 0.1 * Xerr + 0.9 * Xerr2;
         %
-        st_err = sqrt( (error_est * (1 - error_est))/N );
+        st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+        st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
         %
-        rel_err = st_err/error_est;
+        rel_err_Z = st_err_Z/Zerr;
+        rel_err_X = st_err_X/Xerr;
         %
     end
-    Gamma_4Q(idx,:) = [gamma,error_est]
+    Gamma_4Q(idx,:) = [gamma,1-psucc,Zerr,Xerr]
 end
 
 for idx = 1:numel(gammaRange)
     gamma = gammaRange(idx);
     N=10;
-    error_est = 1 - Code7Qubit(1, gamma,1, N);
-    st_err = sqrt( (error_est * (1 - error_est))/N );
+    [psucc,Zerr,Xerr] = Code7Qubit(1, gamma,1, N);
+    st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+    st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
     %
-    rel_err = st_err/error_est;
-    while rel_err > rel_err_thr || error_est==0
+    rel_err_Z = st_err_Z/Zerr;
+    rel_err_X = st_err_X/Xerr;
+    while rel_err_Z > rel_err_thr || rel_err_X > rel_err_thr || Zerr == 0 || Xerr == 0
         N = 10*N;
-        error_est2 = 1 - Code7Qubit(1, gamma,1, 0.9*N);
-        error_est = 0.1 * error_est + 0.9 * error_est2;
+        [psucc2,Zerr2,Xerr2] = Code7Qubit(1, gamma,1, 0.9*N);
+        psucc = 0.1 * psucc + 0.9 * psucc2;
+        Zerr = 0.1 * Zerr + 0.9 * Zerr2;
+        Xerr = 0.1 * Xerr + 0.9 * Xerr2;
         %
-        st_err = sqrt( (error_est * (1 - error_est))/N );
+        st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+        st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
         %
-        rel_err = st_err/error_est;
+        rel_err_Z = st_err_Z/Zerr;
+        rel_err_X = st_err_X/Xerr;
         %
     end
-    Gamma_7Q(idx,:) = [gamma,error_est]
+    Gamma_7Q(idx,:) = [gamma,1-psucc,Zerr,Xerr]
 end
 
 for idx = 1:numel(gammaRange)
     gamma = gammaRange(idx);
     N=10;
-    error_est = 1 - Code7QubitNoAnalogInfo(1, gamma,1, N);
-    st_err = sqrt( (error_est * (1 - error_est))/N );
+    [psucc,Zerr,Xerr] = Code7QubitNoAnalogInfo(1, gamma,1, N);
+    st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+    st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
     %
-    rel_err = st_err/error_est;
-    while rel_err > rel_err_thr  || error_est==0
+    rel_err_Z = st_err_Z/Zerr;
+    rel_err_X = st_err_X/Xerr;
+    while rel_err_Z > rel_err_thr || rel_err_X > rel_err_thr || Zerr == 0 || Xerr == 0
         N = 10*N;
-        error_est2 = 1 - Code7QubitNoAnalogInfo(1, gamma,1, 0.9*N);
-        error_est = 0.1 * error_est + 0.9 * error_est2;
+        [psucc2,Zerr2,Xerr2] = Code7QubitNoAnalogInfo(1, gamma,1, 0.9*N);
+        psucc = 0.1 * psucc + 0.9 * psucc2;
+        Zerr = 0.1 * Zerr + 0.9 * Zerr2;
+        Xerr = 0.1 * Xerr + 0.9 * Xerr2;
         %
-        st_err = sqrt( (error_est * (1 - error_est))/N );
+        st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+        st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
         %
-        rel_err = st_err/error_est;
+        rel_err_Z = st_err_Z/Zerr;
+        rel_err_X = st_err_X/Xerr;
         %
     end
-    Gamma_7Q_NoAnalogInfo(idx,:) = [gamma,error_est]
+    Gamma_7QNoAnalogInfo(idx,:) = [gamma,1-psucc,Zerr,Xerr]
 end
 
 for idx = 1:numel(gammaRange)
     gamma = gammaRange(idx);
     N=10;
-    error_est = 1 - GKPRepeaterChain(1, gamma, N);
-    st_err = sqrt( (error_est * (1 - error_est))/N );
+    [psucc,Zerr,Xerr] = GKPRepeaterChain(1, gamma, N);
+    st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+    st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
     %
-    rel_err = st_err/error_est;
-    while rel_err > rel_err_thr  || error_est==0
+    rel_err_Z = st_err_Z/Zerr;
+    rel_err_X = st_err_X/Xerr;
+    while rel_err_Z > rel_err_thr || rel_err_X > rel_err_thr || Zerr == 0 || Xerr == 0
         N = 10*N;
-        error_est2 = 1 - GKPRepeaterChain(1, gamma, 0.9*N);
-        error_est = 0.1 * error_est + 0.9 * error_est2;
+        [psucc2,Zerr2,Xerr2] = GKPRepeaterChain(1, gamma, 0.9*N);
+        psucc = 0.1 * psucc + 0.9 * psucc2;
+        Zerr = 0.1 * Zerr + 0.9 * Zerr2;
+        Xerr = 0.1 * Xerr + 0.9 * Xerr2;
         %
-        st_err = sqrt( (error_est * (1 - error_est))/N );
+        st_err_Z = sqrt( (Zerr * (1 - Zerr))/N );
+        st_err_X = sqrt( (Xerr * (1 - Xerr))/N );
         %
-        rel_err = st_err/error_est;
+        rel_err_Z = st_err_Z/Zerr;
+        rel_err_X = st_err_X/Xerr;
         %
     end
-    Gamma_GKPRepChain(idx,:) = [gamma,error_est]
+    Gamma_GKPRepChain(idx,:) = [gamma,1-psucc,Zerr,Xerr]
 end
 
-save('DataFig2.mat', 'Gamma_4Q', 'Gamma_7Q', 'Gamma_7Q_NoAnalogInfo','Gamma_GKPRepChain')
+save('DataFig2.mat', 'Gamma_4Q', 'Gamma_7Q', 'Gamma_7QNoAnalogInfo','Gamma_GKPRepChain')
