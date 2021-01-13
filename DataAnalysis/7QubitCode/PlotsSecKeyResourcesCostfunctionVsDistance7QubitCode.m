@@ -19,9 +19,9 @@ PLOB = -log2(1-exp(-X/22));
 figure
 plot(X,SecretKeyMinCostfunc,'LineWidth', 7)
 hold all
-plot(X,SecretKeyMinCostfuncOnlyMultiQubit,'LineWidth', 7)
+plot(X,SecretKeyMinCostfuncOnlyMultiQubit,'LineWidth', 7,'LineStyle',':')
 plot(X,PLOB,'LineWidth', 7,'LineStyle','--')
-yline(1/7,'LineWidth', 7,'LineStyle',':');
+yline(1/7,'LineWidth', 4,'LineStyle',':');
 ylim([0. 0.3])
 grid on
 ax = gca;
@@ -43,7 +43,7 @@ figure
 plot(X,MinNMultiQubit,'color',[0.4660    0.6740    0.1880],'LineWidth', 7)
 hold all
 plot(X,MinNall-MinNMultiQubit,'color',[0    0.4470    0.7410],'LineWidth', 7)
-plot(X,MinNOnlyMultiQubit,'color',[0.8500    0.3250    0.0980],'LineWidth', 7)
+plot(X,MinNOnlyMultiQubit,'color',[0.8500    0.3250    0.0980],'LineWidth', 7, 'LineStyle',':')
 ylim([0 40])
 grid on
 ax = gca;
@@ -62,7 +62,7 @@ legend('Type-A repeaters, hybrid', 'Type-B repeaters, hybrid', 'Only type-A repe
 figure
 hold all
 plot(X,CostfunctionMin7QubitCode,'LineWidth', 7)
-plot(X,CostfunctionMinOnlyMultiQubit7QubitCode,'LineWidth', 7)
+plot(X,CostfunctionMinOnlyMultiQubit7QubitCode,'LineWidth', 7,'LineStyle',':')
 grid on
 ax = gca;
 ax.GridAlpha = 1;

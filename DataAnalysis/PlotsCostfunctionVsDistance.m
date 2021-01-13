@@ -12,9 +12,9 @@
 figure
 hold all
 plot(X,CostfunctionMin4QubitCode,'LineWidth', 7, 'color','[0.8500, 0.3250, 0.0980]')
-plot(X,CostfunctionMinOnlyMultiQubit4QubitCode,'LineWidth', 7, 'color','[0, 0.4470, 0.741]')
-plot(X,CostfunctionMin7QubitCode,'LineWidth', 7)
-plot(X,CostfunctionMinOnlyMultiQubit7QubitCode,'LineWidth', 7)
+plot(X,CostfunctionMinOnlyMultiQubit4QubitCode,'LineWidth', 7, 'color','[0.8500, 0.3250, 0.0980]', 'LineStyle',':')
+plot(X,CostfunctionMin7QubitCode,'LineWidth', 7, 'color','[0, 0.4470, 0.741]')
+plot(X,CostfunctionMinOnlyMultiQubit7QubitCode,'LineWidth', 7, 'color','[0, 0.4470, 0.741]', 'LineStyle',':')
 grid on
 ax = gca;
 ax.GridAlpha = 1;
