@@ -25,6 +25,6 @@ supersizeme(+3.5)
 
 title('Normalised cost function C'' vs distance')
 xlabel('Distance (km)')
-ylabel('Normalised cost function')
+ylabel('Normalised cost function C''')
 
 legend('Hybrid, [[4,1,2]]', 'Only type-A repeaters, [[4,1,2]]', 'Hybrid, [[7,1,3]]', 'Only type-A repeaters, [[7,1,3]]', 'Location', 'northwest')

@@ -27,7 +27,7 @@ grid on
 ax = gca;
 ax.GridAlpha = 1;
 supersizeme(+3.5)
-title('Infidelity vs photon loss probability \gamma')
+title('Maximum infidelity vs photon loss probability \gamma')
 xlabel('\gamma')
-ylabel('Infidelity')
+ylabel('Maximum infidelity')
 legend('only [[4,1,2]]', 'only GKP', '[[7,1,3]] with GKP, no analog info', '[[4,1,2]] with GKP', '[[7,1,3]] with GKP', 'Location', 'southeast')

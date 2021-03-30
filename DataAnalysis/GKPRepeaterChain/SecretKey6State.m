@@ -33,21 +33,21 @@ if Xerr > 0.5
 end
 
 %Establish the effective flip probability over distance Ltot
-Zerr_temp = (1 - (1 - 2 * Zerr)^(Nall * Ltot / (NElemLinks*Lfix)) )/2;
-Xerr_temp = (1 - (1 - 2 * Xerr)^(Nall * Ltot / (NElemLinks*Lfix)) )/2;
+QerrZ = (1 - (1 - 2 * Zerr)^(Nall * Ltot / (NElemLinks*Lfix)) )/2;
+QerrX = (1 - (1 - 2 * Xerr)^(Nall * Ltot / (NElemLinks*Lfix)) )/2;
 
 %Extract independent probabilities X, Y, Z
-Zerr0 = Zerr_temp * (1 - Xerr_temp);
-Xerr0 = Xerr_temp * (1 - Zerr_temp);
-Yerr0 = Zerr_temp * Xerr_temp;
+qZ = QerrZ * (1 - QerrX);
+qX = QerrX * (1 - QerrZ);
+qY = QerrZ * QerrX;
 
 
 %QBER
 %Flip in each basis generates errors in the other 2 bases
 
-eX = min(Zerr0 + Yerr0, 0.5) ;
-eZ = min(Xerr0 + Yerr0, 0.5) ;
-eY = min(Zerr0 + Xerr0, 0.5) ;
+eX = min(qZ + qY, 0.5) ;
+eZ = min(qX + qY, 0.5) ;
+eY = min(qZ + qX, 0.5) ;
 
 
 

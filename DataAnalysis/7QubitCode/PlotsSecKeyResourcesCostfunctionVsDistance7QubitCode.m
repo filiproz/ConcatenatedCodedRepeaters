@@ -30,9 +30,9 @@ set(gca, 'XScale', 'log')
 supersizeme(+3.5)
 
 
-title('Secret key r'' vs distance, [[7,1,3]] code')
+title('Secret-key rate r'' vs distance, [[7,1,3]] code')
 xlabel('Distance (km)')
-ylabel('Secret key r''')
+ylabel('Secret-key rate r'' (bits per mode)')
 
 legend('Hybrid','Only type-A repeaters', 'PLOB bound', 'Saturation secret key','Location', 'northeast')
 
@@ -71,8 +71,8 @@ set(gca, 'YScale', 'log')
 supersizeme(+3.5)
 
 
-title('Normalised cost function vs distance, [[7,1,3]] code')
+title('Normalised cost function C'' vs distance, [[7,1,3]] code')
 xlabel('Distance (km)')
-ylabel('Normalised cost function')
+ylabel('Normalised cost function C''')
 
 legend('Hybrid', 'Only type-A repeaters','Location', 'northwest')
